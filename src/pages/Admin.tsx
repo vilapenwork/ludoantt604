@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, Plus, Pencil, Trash2, LogOut, RefreshCw, ShieldAlert, Home } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, LogOut, RefreshCw, ShieldAlert, Home, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import AdminAccounts from "@/components/admin/AdminAccounts";
 
-type TabType = "articles" | "activities" | "leaders";
+type TabType = "articles" | "activities" | "leaders" | "accounts";
 
 const Admin = () => {
   const { isAdmin, loading, signOut } = useAuth();
@@ -29,17 +30,18 @@ const Admin = () => {
   }, [loading, isAdmin, navigate]);
 
   useEffect(() => {
-    if (!loading && isAdmin) {
+    if (!loading && isAdmin && activeTab !== "accounts") {
       void fetchData();
     }
   }, [activeTab, loading, isAdmin]);
 
   const fetchData = async () => {
+    if (activeTab === "accounts") return;
     setDataLoading(true);
     setDataError(null);
 
     const { data: rows, error } = await supabase
-      .from(activeTab)
+      .from(activeTab as "articles" | "activities" | "leaders")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -56,7 +58,7 @@ const Admin = () => {
 
   const handleDelete = async () => {
     if (!deleteId) return;
-    const { error } = await supabase.from(activeTab).delete().eq("id", deleteId);
+    const { error } = await supabase.from(activeTab as "articles" | "activities" | "leaders").delete().eq("id", deleteId);
     if (error) {
       toast({ title: "Lỗi", description: error.message, variant: "destructive" });
     } else {
@@ -90,7 +92,8 @@ const Admin = () => {
     );
   }
 
-  const tabLabels: Record<TabType, string> = { articles: "Bài viết", activities: "Hoạt động", leaders: "Lãnh đạo" };
+  const tabLabels: Record<TabType, string> = { articles: "Bài viết", activities: "Hoạt động", leaders: "Lãnh đạo", accounts: "Tài khoản" };
+  const dataTabs: TabType[] = ["articles", "activities", "leaders"];
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -130,9 +133,11 @@ const Admin = () => {
                 <TabsTrigger key={tab} value={tab} className="flex-1 sm:flex-none">{tabLabels[tab]}</TabsTrigger>
               ))}
             </TabsList>
-            <Button size="sm" onClick={() => navigate(`/admin/${activeTab}/new`)}>
-              <Plus className="mr-1.5 h-4 w-4" /> Thêm mới
-            </Button>
+            {activeTab !== "accounts" && (
+              <Button size="sm" onClick={() => navigate(`/admin/${activeTab}/new`)}>
+                <Plus className="mr-1.5 h-4 w-4" /> Thêm mới
+              </Button>
+            )}
           </div>
 
           {dataError && (
@@ -148,7 +153,7 @@ const Admin = () => {
             </Alert>
           )}
 
-          {(Object.keys(tabLabels) as TabType[]).map((tab) => (
+          {dataTabs.map((tab) => (
             <TabsContent key={tab} value={tab}>
               {/* Mobile cards */}
               <div className="space-y-2 sm:hidden">
@@ -228,6 +233,9 @@ const Admin = () => {
               </div>
             </TabsContent>
           ))}
+          <TabsContent value="accounts">
+            <AdminAccounts />
+          </TabsContent>
         </Tabs>
       </main>
 
