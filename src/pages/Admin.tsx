@@ -58,7 +58,7 @@ const Admin = () => {
 
   const handleDelete = async () => {
     if (!deleteId) return;
-    const { error } = await supabase.from(activeTab).delete().eq("id", deleteId);
+    const { error } = await supabase.from(activeTab as "articles" | "activities" | "leaders").delete().eq("id", deleteId);
     if (error) {
       toast({ title: "Lỗi", description: error.message, variant: "destructive" });
     } else {
