@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { uploadImage as uploadImageToR2 } from "@/lib/uploadImage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -107,11 +108,13 @@ const AdminEditor = () => {
   }, [isValidType]);
 
   const uploadImage = async (file: File): Promise<string | null> => {
-    const ext = file.name.split(".").pop() || "png";
-    const path = `headers/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("images").upload(path, file);
-    if (error) { toast({ title: "Lỗi upload", description: error.message, variant: "destructive" }); return null; }
-    return supabase.storage.from("images").getPublicUrl(path).data.publicUrl;
+    try {
+      return await uploadImageToR2(file);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Không tải được ảnh lên";
+      toast({ title: "Lỗi upload", description: msg, variant: "destructive" });
+      return null;
+    }
   };
 
   const handleHeaderImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

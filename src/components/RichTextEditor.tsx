@@ -19,7 +19,7 @@ import {
   AlignRight,
   Youtube as YoutubeIcon,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { uploadImage } from "@/lib/uploadImage";
 import { useCallback, useEffect } from "react";
 
 interface RichTextEditorProps {
@@ -79,12 +79,12 @@ const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
   const uploadAndInsertImage = useCallback(
     async (file: File) => {
       if (!editor) return;
-      const ext = file.name.split(".").pop() || "png";
-      const path = `content/${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from("images").upload(path, file);
-      if (error) return;
-      const { data: urlData } = supabase.storage.from("images").getPublicUrl(path);
-      editor.chain().focus().setImage({ src: urlData.publicUrl }).run();
+      try {
+        const url = await uploadImage(file);
+        editor.chain().focus().setImage({ src: url }).run();
+      } catch (e) {
+        console.error("Image upload failed:", e);
+      }
     },
     [editor],
   );
