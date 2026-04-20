@@ -92,7 +92,8 @@ const Admin = () => {
     );
   }
 
-  const tabLabels: Record<TabType, string> = { articles: "Bài viết", activities: "Hoạt động", leaders: "Lãnh đạo" };
+  const tabLabels: Record<TabType, string> = { articles: "Bài viết", activities: "Hoạt động", leaders: "Lãnh đạo", accounts: "Tài khoản" };
+  const dataTabs: TabType[] = ["articles", "activities", "leaders"];
 
   return (
     <div className="min-h-screen bg-muted/30">
