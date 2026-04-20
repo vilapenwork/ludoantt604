@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, Plus, Pencil, Trash2, LogOut, RefreshCw, ShieldAlert, Home } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, LogOut, RefreshCw, ShieldAlert, Home, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import AdminAccounts from "@/components/admin/AdminAccounts";
 
-type TabType = "articles" | "activities" | "leaders";
+type TabType = "articles" | "activities" | "leaders" | "accounts";
 
 const Admin = () => {
   const { isAdmin, loading, signOut } = useAuth();
