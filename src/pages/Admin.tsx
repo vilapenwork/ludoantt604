@@ -153,7 +153,7 @@ const Admin = () => {
             </Alert>
           )}
 
-          {(Object.keys(tabLabels) as TabType[]).map((tab) => (
+          {dataTabs.map((tab) => (
             <TabsContent key={tab} value={tab}>
               {/* Mobile cards */}
               <div className="space-y-2 sm:hidden">
