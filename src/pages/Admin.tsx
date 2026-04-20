@@ -30,17 +30,18 @@ const Admin = () => {
   }, [loading, isAdmin, navigate]);
 
   useEffect(() => {
-    if (!loading && isAdmin) {
+    if (!loading && isAdmin && activeTab !== "accounts") {
       void fetchData();
     }
   }, [activeTab, loading, isAdmin]);
 
   const fetchData = async () => {
+    if (activeTab === "accounts") return;
     setDataLoading(true);
     setDataError(null);
 
     const { data: rows, error } = await supabase
-      .from(activeTab)
+      .from(activeTab as "articles" | "activities" | "leaders")
       .select("*")
       .order("created_at", { ascending: false });
 
