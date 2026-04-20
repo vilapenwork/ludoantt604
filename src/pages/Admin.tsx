@@ -233,6 +233,9 @@ const Admin = () => {
               </div>
             </TabsContent>
           ))}
+          <TabsContent value="accounts">
+            <AdminAccounts />
+          </TabsContent>
         </Tabs>
       </main>
 
