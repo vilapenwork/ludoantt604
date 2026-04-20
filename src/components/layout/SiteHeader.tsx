@@ -32,7 +32,7 @@ import { Separator } from "@/components/ui/separator";
 export const NAV_ITEMS = [
   { label: "Lịch sử lữ đoàn", to: "/lich-su", icon: History },
   { label: "Tin tức", to: "/tin-tuc", icon: Newspaper },
-  { label: "Hoạt động", to: "/activities", icon: CalendarDays },
+  { label: "Hoạt động đơn vị", to: "/activities", icon: CalendarDays },
   { label: "Lãnh đạo", to: "/leaders", icon: Users },
 ];
 

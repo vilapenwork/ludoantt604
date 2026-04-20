@@ -286,11 +286,16 @@ const Index = () => {
         </Link>
       )}
       <CardHeader className="space-y-1 p-2">
-        <div className="flex items-center  gap-1 text-xs  text-muted-foreground">
+        <div className="flex items-center  gap-1 text-xs text-muted-foreground ">
           {/* gap-1 mean */}
           {/* <Badge variant="outline">{item.category || (item.kind === "activity" ? "Hoạt động" : "Tin tức")}</Badge> */}
           {/* display 'tin-tuc' by 'Tin tức', 'thong-bao' by 'Thông báo', 'su-kien' by 'Sự kiện' */}
-          <Badge variant="outline">
+          <Badge
+            variant="outline"
+            style={{
+              fontSize: "0.65rem",
+            }}
+          >
             {item.category === "tin-tuc" ?
               "Tin tức"
             : item.category === "thong-bao" ?
@@ -306,21 +311,27 @@ const Index = () => {
         </div>
         {/* <CardTitle className="font-display text-xl leading-snug"> */}
         {/* text - xl pc, text-lg mobile */}
-        <CardTitle className="font-display text-lg leading-snug p-2 
+        <CardTitle
+          className="font-display text-lg leading-snug p-2 
         [text-transform:capitalize]:first-letter
 
 
-        ">
+        "
+        >
           <Link to={item.href} className="hover:text-primary ">
             {item.title}
           </Link>
         </CardTitle>
         <CardDescription>
           {/* {stripHtml(item.content).slice(0, 100) || "Chưa có nội dung tóm tắt."}{" "} */}
-          
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent
+        className="mt-auto popover-open:shadow-md
+          transition-shadow
+          backgroundColor:transparent"
+        
+      >
         <Button asChild variant="outline">
           <Link to={item.href}>
             Xem thêm <ArrowRight className="h-4 w-4" />
@@ -409,13 +420,18 @@ const Index = () => {
       </form>
       <div className="flex  items-center gap-2 justify-end">
         {showCategory && categories.length > 0 && (
-          <Select value={categoryParam} onValueChange={(v) => updateParam("cat", v)}>
-            <SelectTrigger className="h-9 w-[160px]"><SelectValue placeholder="Chuyên mục" /></SelectTrigger>
+          <Select
+            value={categoryParam}
+            onValueChange={(v) => updateParam("cat", v)}
+          >
+            <SelectTrigger className="h-9 w-[160px]">
+              <SelectValue placeholder="Chuyên mục" />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả chuyên mục</SelectItem>
               {/* {categories.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                */}
-               {/* {item.category === "tin-tuc" ?
+              {/* {item.category === "tin-tuc" ?
               "Tin tức"
             : item.category === "thong-bao" ?
               "Thông báo"
@@ -425,25 +441,31 @@ const Index = () => {
               (item.kind === "activity" ? "Hoạt động" : "Tin tức")
             } */}
 
-              {categories.map((c) => {  
-                const label = c === "tin-tuc" ?
-                  "Tin tức"
-                : c === "thong-bao" ?
-                  "Thông báo"
-                : c === "su-kien" ? 
-                  "Sự kiện"
-                : c;
-                return <SelectItem key={c} value={c}>{label}</SelectItem>;
-              }
-              )}
-
+              {categories.map((c) => {
+                const label =
+                  c === "tin-tuc" ? "Tin tức"
+                  : c === "thong-bao" ? "Thông báo"
+                  : c === "su-kien" ? "Sự kiện"
+                  : c;
+                return (
+                  <SelectItem key={c} value={c}>
+                    {label}
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         )}
         <Select value={timeParam} onValueChange={(v) => updateParam("time", v)}>
-          <SelectTrigger className="h-9 w-[170px]"><SelectValue placeholder="Thời gian" /></SelectTrigger>
+          <SelectTrigger className="h-9 w-[170px]">
+            <SelectValue placeholder="Thời gian" />
+          </SelectTrigger>
           <SelectContent>
-            {TIME_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+            {TIME_OPTIONS.map((o) => (
+              <SelectItem key={o.value} value={o.value}>
+                {o.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
