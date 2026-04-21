@@ -111,7 +111,11 @@ const Hero = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3 justify-center">
-            <Button asChild size="lg" className="bg-[hsl(var(--hero-foreground))] text-[hsl(var(--hero-bg))] hover:bg-[hsl(var(--hero-foreground)/0.9)]">
+            <Button
+              asChild
+              size="lg"
+              className="text-white border-0 bg-[length:200%_200%] animate-gradient-shift bg-gradient-to-r from-[#ff5f6d] via-[#ffc371] to-[#ff5f6d] hover:opacity-95"
+            >
               <Link to="/lich-su">
                 Xem thêm <ArrowRight className="h-4 w-4" />
               </Link>
