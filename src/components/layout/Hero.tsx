@@ -1,10 +1,35 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Hero = () => {
+  // Replay hero animations whenever it scrolls back into view
+  const [animKey, setAnimKey] = useState(0);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    let wasOut = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            wasOut = true;
+          } else if (wasOut) {
+            wasOut = false;
+            setAnimKey((k) => k + 1);
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="relative isolate overflow-hidden">
+    <section ref={sectionRef} key={animKey} className="relative isolate overflow-hidden">
       {/* gradient backdrop */}
       <div
         aria-hidden
@@ -44,12 +69,10 @@ const Hero = () => {
         <div className="max-w-3xl text-[hsl(var(--hero-foreground))]">
           <span   style={{ color: "#FFD700",backgroundColor: "#D32F3F" }}
           className="
-         
+          animate-slide-in-down
           inline-flex items-center gap-2 rounded-full border border-[hsl(var(--hero-foreground)/0.25)] b
           g-[hsl(var(--hero-foreground)/0.06)] px-3 py-1 text-xs font-medium uppercase tracking-wider
            text-[hsl(var(--hero-foreground)/0.85)]"
-
-           
            >
             <Sparkles className="h-3.5 w-3.5" />
           Kịp thời - Chính xác - Bí mật - An toàn
