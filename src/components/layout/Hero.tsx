@@ -59,7 +59,7 @@ const Hero = () => {
           // color #D32F3F
             style={{ color: "#f9e972" }}
           >
-            Lịch sử Lữ đoàn Thông tin 604
+            Trang thông tin Lữ đoàn 604
           </h1>
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[hsl(var(--hero-foreground)/0.85)] md:text-lg

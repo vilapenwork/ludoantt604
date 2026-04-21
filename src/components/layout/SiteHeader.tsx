@@ -71,7 +71,7 @@ const SiteHeader = () => {
           </div>
           <div className="">
             <p className="font-display text-base font-semibold leading-tight">
-              Trang thông tin Lữ đoàn 604
+               Lữ đoàn 604
             </p>
             <p className="hidden sm:block text-xs text-muted-foreground">
               Lịch sử & truyền thống
