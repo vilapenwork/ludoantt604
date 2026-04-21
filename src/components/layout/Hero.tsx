@@ -1,28 +1,8 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const FULL_TITLE = "Trang thông tin Lữ đoàn 604";
-const BREAK_AFTER = "Trang thông tin ";
-
 const Hero = () => {
-  const [typed, setTyped] = useState("");
-
-  useEffect(() => {
-    let i = 0;
-    const id = setInterval(() => {
-      i++;
-      setTyped(FULL_TITLE.slice(0, i));
-      if (i >= FULL_TITLE.length) clearInterval(id);
-    }, 70);
-    return () => clearInterval(id);
-  }, []);
-
-  const beforeBreak = typed.slice(0, Math.min(typed.length, BREAK_AFTER.length));
-  const afterBreak = typed.length > BREAK_AFTER.length ? typed.slice(BREAK_AFTER.length) : "";
-  const done = typed.length >= FULL_TITLE.length;
-
   return (
     <section className="relative isolate overflow-hidden">
       {/* gradient backdrop */}
@@ -87,19 +67,18 @@ const Hero = () => {
 
           </h1> */}
           <h1
-            className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl"
+            className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl animate-slide-in-left"
             style={{ color: "#f9e972" }}
-            aria-label={FULL_TITLE}
           >
-            {beforeBreak}
+            Trang thông tin
             <br className="lg:hidden" />
-            {afterBreak}
+            {" "}Lữ đoàn 604
           </h1>
 
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[hsl(var(--hero-foreground)/0.85)] md:text-lg
-            text-justify animate-fade-in
-          " style={{ animationDuration: "1.5s", animationDelay: "0.3s", animationFillMode: "both" }}>
+            text-justify animate-slide-in-right
+          " style={{ animationDelay: "0.6s" }}>
             Hành trình hơn bốn thập kỷ xây dựng, chiến đấu và trưởng thành của Lữ đoàn Thông tin 604 –
             đơn vị bảo đảm thông tin liên lạc cho Bộ Tư lệnh Quân khu 2, gìn giữ và phát huy truyền thống
             anh hùng của Quân đội nhân dân Việt Nam.
