@@ -339,8 +339,8 @@ const Index = () => {
     </Card>
   );
 
-  const renderLeaderCard = (leader: Leader) => (
-    <Card key={leader.id} className="border-border/80">
+  const renderLeaderCard = (leader: Leader, index = 0) => (
+    <Card key={leader.id} className="border-border/80 animate-fade-in-up transition-all duration-300 hover:shadow-lg hover:-translate-y-1" style={{ animationDelay: `${Math.min(index, 8) * 80}ms` }}>
       <CardHeader className="flex flex-row items-start gap-4 space-y-0">
         <Avatar className="h-14 w-14 border">
           <AvatarImage
