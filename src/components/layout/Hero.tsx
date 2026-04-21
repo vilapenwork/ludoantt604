@@ -1,8 +1,28 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const FULL_TITLE = "Trang thông tin Lữ đoàn 604";
+const BREAK_AFTER = "Trang thông tin ";
+
 const Hero = () => {
+  const [typed, setTyped] = useState("");
+
+  useEffect(() => {
+    let i = 0;
+    const id = setInterval(() => {
+      i++;
+      setTyped(FULL_TITLE.slice(0, i));
+      if (i >= FULL_TITLE.length) clearInterval(id);
+    }, 70);
+    return () => clearInterval(id);
+  }, []);
+
+  const beforeBreak = typed.slice(0, Math.min(typed.length, BREAK_AFTER.length));
+  const afterBreak = typed.length > BREAK_AFTER.length ? typed.slice(BREAK_AFTER.length) : "";
+  const done = typed.length >= FULL_TITLE.length;
+
   return (
     <section className="relative isolate overflow-hidden">
       {/* gradient backdrop */}
