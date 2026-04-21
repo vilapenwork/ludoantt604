@@ -87,12 +87,12 @@ const Hero = () => {
             <Sparkles className="h-3.5 w-3.5 shrink-0" />
             <span className="relative flex w-56 overflow-hidden sm:w-72">
               <span className="flex shrink-0 animate-marquee whitespace-nowrap">
-                <span className="px-4">Kịp thời - Chính xác - Bí mật - An toàn</span>
-                <span className="px-4">Kịp thời - Chính xác - Bí mật - An toàn</span>
+                <span className="px-1">Kịp thời - Chính xác - Bí mật - An toàn -</span>
+                <span className="px-1">Kịp thời - Chính xác - Bí mật - An toàn -</span>
               </span>
               <span className="flex shrink-0 animate-marquee whitespace-nowrap" aria-hidden>
-                <span className="px-4">Kịp thời - Chính xác - Bí mật - An toàn</span>
-                <span className="px-4">Kịp thời - Chính xác - Bí mật - An toàn</span>
+                <span className="px-1">Kịp thời - Chính xác - Bí mật - An toàn -</span>
+                <span className="px-1">Kịp thời - Chính xác - Bí mật - An toàn -</span>
               </span>
             </span>
           </span>
@@ -126,7 +126,10 @@ const Hero = () => {
             anh hùng của Quân đội nhân dân Việt Nam.
           </p>
 
-          <div className="mt-8 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg h-40 sm:h-48 md:h-56 lg:h-64">
+          <div className="mt-1 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg 
+           h-40 sm:h-58 md:h-56 lg:h-64
+     
+          ">
             {heroImages.map((src, i) => (
               <img
                 key={i}
