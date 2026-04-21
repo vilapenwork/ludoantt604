@@ -2,6 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Autoplay from "embla-carousel-autoplay";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 import heroImg1 from "@/assets/hero-1.png";
 import heroImg2 from "@/assets/hero-2.png";
 import heroImg3 from "@/assets/hero-3.png";
@@ -13,13 +20,55 @@ const Hero = () => {
   const [animKey, setAnimKey] = useState(0);
   const sectionRef = useRef<HTMLElement | null>(null);
   const [slideIdx, setSlideIdx] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+  const [maxH, setMaxH] = useState<number>(0);
+  const autoplay = useRef(
+    Autoplay({ delay: 2500, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
+
+  // Find the tallest image (at rendered width) so the carousel keeps that height
+  // and other images scale proportionally inside it.
+  useEffect(() => {
+    let cancelled = false;
+    const compute = () => {
+      const containerW = sectionRef.current?.querySelector<HTMLElement>(
+        "[data-hero-carousel]"
+      )?.clientWidth;
+      if (!containerW) return;
+      Promise.all(
+        heroImages.map(
+          (src) =>
+            new Promise<{ w: number; h: number }>((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+              img.onerror = () => resolve({ w: 1, h: 1 });
+              img.src = src;
+            })
+        )
+      ).then((dims) => {
+        if (cancelled) return;
+        const tallest = Math.max(...dims.map((d) => (containerW * d.h) / d.w));
+        // cap height so hero stays in viewport
+        setMaxH(Math.min(tallest, 420));
+      });
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("resize", compute);
+    };
+  }, []);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setSlideIdx((i) => (i + 1) % heroImages.length);
-    }, 2000);
-    return () => clearInterval(id);
-  }, []);
+    if (!api) return;
+    const onSelect = () => setSlideIdx(api.selectedScrollSnap());
+    onSelect();
+    api.on("select", onSelect);
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
