@@ -21,7 +21,9 @@ const ScrollToTop = () => {
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       className={cn(
         "fixed bottom-6 right-6 z-50 h-11 w-11 rounded-full shadow-lg transition-all duration-300",
-        visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0",
+        "bg-[length:200%_200%] animate-gradient-shift bg-gradient-to-r from-[#ff5f6d] via-[#ffc371] to-[#ff5f6d]",
+        "hover:scale-110 hover:shadow-xl",
+        visible ? "translate-y-0 opacity-100 animate-bounce-soft" : "pointer-events-none translate-y-3 opacity-0",
       )}
     >
       <ArrowUp className="h-5 w-5" />
