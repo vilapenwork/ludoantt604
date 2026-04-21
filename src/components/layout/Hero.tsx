@@ -175,23 +175,42 @@ const Hero = () => {
             anh hùng của Quân đội nhân dân Việt Nam.
           </p>
 
-          <div className="mt-8 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg h-40 sm:h-48 md:h-56 lg:h-64">
-            {heroImages.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt={`Hình ảnh Lữ đoàn 604 ${i + 1}`}
-                loading="lazy"
-                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
-                  i === slideIdx ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            ))}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+          <div
+            data-hero-carousel
+            className="mt-8 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg bg-black/20"
+            style={maxH ? { height: `${maxH}px` } : { minHeight: "10rem" }}
+          >
+            <Carousel
+              setApi={setApi}
+              opts={{ loop: true, align: "center" }}
+              plugins={[autoplay.current]}
+              className="h-full"
+            >
+              <CarouselContent className="h-full -ml-0">
+                {heroImages.map((src, i) => (
+                  <CarouselItem key={i} className="pl-0 basis-full h-full">
+                    <div className="flex h-full w-full items-center justify-center">
+                      <img
+                        src={src}
+                        alt={`Hình ảnh Lữ đoàn 604 ${i + 1}`}
+                        loading="lazy"
+                        draggable={false}
+                        style={maxH ? { maxHeight: `${maxH}px` } : undefined}
+                        className="h-full w-auto max-w-full object-contain select-none"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+            <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
               {heroImages.map((_, i) => (
-                <span
+                <button
                   key={i}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                  type="button"
+                  aria-label={`Chuyển tới ảnh ${i + 1}`}
+                  onClick={() => api?.scrollTo(i)}
+                  className={`pointer-events-auto h-1.5 rounded-full transition-all duration-300 ${
                     i === slideIdx ? "w-6 bg-white" : "w-1.5 bg-white/50"
                   }`}
                 />
