@@ -2,6 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Autoplay from "embla-carousel-autoplay";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 import heroImg1 from "@/assets/hero-1.png";
 import heroImg2 from "@/assets/hero-2.png";
 import heroImg3 from "@/assets/hero-3.png";
@@ -13,13 +20,55 @@ const Hero = () => {
   const [animKey, setAnimKey] = useState(0);
   const sectionRef = useRef<HTMLElement | null>(null);
   const [slideIdx, setSlideIdx] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+  const [maxH, setMaxH] = useState<number>(0);
+  const autoplay = useRef(
+    Autoplay({ delay: 2500, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
+
+  // Find the tallest image (at rendered width) so the carousel keeps that height
+  // and other images scale proportionally inside it.
+  useEffect(() => {
+    let cancelled = false;
+    const compute = () => {
+      const containerW = sectionRef.current?.querySelector<HTMLElement>(
+        "[data-hero-carousel]"
+      )?.clientWidth;
+      if (!containerW) return;
+      Promise.all(
+        heroImages.map(
+          (src) =>
+            new Promise<{ w: number; h: number }>((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+              img.onerror = () => resolve({ w: 1, h: 1 });
+              img.src = src;
+            })
+        )
+      ).then((dims) => {
+        if (cancelled) return;
+        const tallest = Math.max(...dims.map((d) => (containerW * d.h) / d.w));
+        // cap height so hero stays in viewport
+        setMaxH(Math.min(tallest, 420));
+      });
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("resize", compute);
+    };
+  }, []);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setSlideIdx((i) => (i + 1) % heroImages.length);
-    }, 2000);
-    return () => clearInterval(id);
-  }, []);
+    if (!api) return;
+    const onSelect = () => setSlideIdx(api.selectedScrollSnap());
+    onSelect();
+    api.on("select", onSelect);
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -126,6 +175,7 @@ const Hero = () => {
             anh hùng của Quân đội nhân dân Việt Nam.
           </p>
 
+<<<<<<< HEAD
           <div className="mt-1 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg 
            h-40 sm:h-58 md:h-56 lg:h-64
      
@@ -142,10 +192,44 @@ const Hero = () => {
               />
             ))}
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+=======
+          <div
+            data-hero-carousel
+            className="mt-8 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg bg-black/20"
+            style={maxH ? { height: `${maxH}px` } : { minHeight: "10rem" }}
+          >
+            <Carousel
+              setApi={setApi}
+              opts={{ loop: true, align: "center" }}
+              plugins={[autoplay.current]}
+              className="h-full"
+            >
+              <CarouselContent className="h-full -ml-0">
+                {heroImages.map((src, i) => (
+                  <CarouselItem key={i} className="pl-0 basis-full h-full">
+                    <div className="flex h-full w-full items-center justify-center">
+                      <img
+                        src={src}
+                        alt={`Hình ảnh Lữ đoàn 604 ${i + 1}`}
+                        loading="lazy"
+                        draggable={false}
+                        style={maxH ? { maxHeight: `${maxH}px` } : undefined}
+                        className="h-full w-auto max-w-full object-contain select-none"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+            <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+>>>>>>> dccba0b2d4c38736226357dd691e197056ab5641
               {heroImages.map((_, i) => (
-                <span
+                <button
                   key={i}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                  type="button"
+                  aria-label={`Chuyển tới ảnh ${i + 1}`}
+                  onClick={() => api?.scrollTo(i)}
+                  className={`pointer-events-auto h-1.5 rounded-full transition-all duration-300 ${
                     i === slideIdx ? "w-6 bg-white" : "w-1.5 bg-white/50"
                   }`}
                 />
