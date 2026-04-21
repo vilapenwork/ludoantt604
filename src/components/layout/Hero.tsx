@@ -67,15 +67,21 @@ const Hero = () => {
       <div className="mx-auto max-w-6xl px-4 py-10 md:py-28 lg:py-32" >
 
         <div className="max-w-3xl text-[hsl(var(--hero-foreground))]">
-          <span   style={{ color: "#FFD700",backgroundColor: "#D32F3F" }}
-          className="
-          animate-slide-in-down
-          inline-flex items-center gap-2 rounded-full border border-[hsl(var(--hero-foreground)/0.25)] b
-          g-[hsl(var(--hero-foreground)/0.06)] px-3 py-1 text-xs font-medium uppercase tracking-wider
-           text-[hsl(var(--hero-foreground)/0.85)]"
-           >
-            <Sparkles className="h-3.5 w-3.5" />
-          Kịp thời - Chính xác - Bí mật - An toàn
+          <span
+            style={{ color: "#FFD700", backgroundColor: "#D32F3F" }}
+            className="animate-slide-in-down inline-flex max-w-full items-center gap-2 overflow-hidden rounded-full border border-[hsl(var(--hero-foreground)/0.25)] px-3 py-1 text-xs font-medium uppercase tracking-wider"
+          >
+            <Sparkles className="h-3.5 w-3.5 shrink-0" />
+            <span className="relative flex w-56 overflow-hidden sm:w-72">
+              <span className="flex shrink-0 animate-marquee whitespace-nowrap">
+                <span className="px-4">Kịp thời - Chính xác - Bí mật - An toàn</span>
+                <span className="px-4">Kịp thời - Chính xác - Bí mật - An toàn</span>
+              </span>
+              <span className="flex shrink-0 animate-marquee whitespace-nowrap" aria-hidden>
+                <span className="px-4">Kịp thời - Chính xác - Bí mật - An toàn</span>
+                <span className="px-4">Kịp thời - Chính xác - Bí mật - An toàn</span>
+              </span>
+            </span>
           </span>
 
             
