@@ -267,13 +267,14 @@ const Index = () => {
     updateParam("q", searchInput.trim());
   };
 
-  const renderItemCard = (item: ContentItem) => (
+  const renderItemCard = (item: ContentItem, index = 0) => (
     <Card
       key={`${item.kind}-${item.id}`}
-      className="flex h-full flex-col overflow-hidden border-border/80 transition-shadow hover:shadow-md
+      className="flex h-full flex-col overflow-hidden border-border/80 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in-up
       px-0
       gap-0
       "
+      style={{ animationDelay: `${Math.min(index, 8) * 80}ms` }}
     >
       {item.image && (
         <Link to={item.href} className="block">
