@@ -270,7 +270,7 @@ const Index = () => {
   const renderItemCard = (item: ContentItem) => (
     <Card
       key={`${item.kind}-${item.id}`}
-      className="overflow-hidden border-border/80 transition-shadow hover:shadow-md
+      className="flex h-full flex-col overflow-hidden border-border/80 transition-shadow hover:shadow-md
       px-0
       gap-0
       "
