@@ -2,11 +2,24 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import heroImg1 from "@/assets/hero-1.png";
+import heroImg2 from "@/assets/hero-2.png";
+import heroImg3 from "@/assets/hero-3.png";
+
+const heroImages = [heroImg1, heroImg2, heroImg3];
 
 const Hero = () => {
   // Replay hero animations whenever it scrolls back into view
   const [animKey, setAnimKey] = useState(0);
   const sectionRef = useRef<HTMLElement | null>(null);
+  const [slideIdx, setSlideIdx] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSlideIdx((i) => (i + 1) % heroImages.length);
+    }, 2000);
+    return () => clearInterval(id);
+  }, []);
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -113,7 +126,31 @@ const Hero = () => {
             anh hùng của Quân đội nhân dân Việt Nam.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3 justify-center">
+          <div className="mt-8 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg h-40 sm:h-48 md:h-56 lg:h-64">
+            {heroImages.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`Hình ảnh Lữ đoàn 604 ${i + 1}`}
+                loading="lazy"
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
+                  i === slideIdx ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))}
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+              {heroImages.map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    i === slideIdx ? "w-6 bg-white" : "w-1.5 bg-white/50"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3 justify-center">
             <Button
               asChild
               size="lg"
