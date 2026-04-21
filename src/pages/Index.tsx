@@ -327,7 +327,7 @@ const Index = () => {
           {/* {stripHtml(item.content).slice(0, 100) || "Chưa có nội dung tóm tắt."}{" "} */}
         </CardDescription>
       </CardHeader>
-      <CardContent     
+      <CardContent className="mt-auto"
       >
         <Button asChild variant="outline">
           <Link to={item.href}>
