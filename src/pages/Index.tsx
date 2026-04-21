@@ -292,6 +292,7 @@ const Index = () => {
           {/* display 'tin-tuc' by 'Tin tức', 'thong-bao' by 'Thông báo', 'su-kien' by 'Sự kiện' */}
           <Badge
             variant="outline"
+            className="whitespace-nowrap px-1.5 py-0 leading-tight"
             style={{
               fontSize: "0.65rem",
             }}
