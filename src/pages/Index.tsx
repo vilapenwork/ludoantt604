@@ -270,7 +270,7 @@ const Index = () => {
   const renderItemCard = (item: ContentItem) => (
     <Card
       key={`${item.kind}-${item.id}`}
-      className="overflow-hidden border-border/80 transition-shadow hover:shadow-md
+      className="flex h-full flex-col overflow-hidden border-border/80 transition-shadow hover:shadow-md
       px-0
       gap-0
       "
@@ -292,6 +292,7 @@ const Index = () => {
           {/* display 'tin-tuc' by 'Tin tức', 'thong-bao' by 'Thông báo', 'su-kien' by 'Sự kiện' */}
           <Badge
             variant="outline"
+            className="whitespace-nowrap px-1.5 py-0 leading-tight"
             style={{
               fontSize: "0.65rem",
             }}
