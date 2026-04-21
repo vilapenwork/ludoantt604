@@ -168,7 +168,7 @@ const SiteHeader = () => {
               </div>
               <Separator />
 
-              <form onSubmit={submitSearch} className="space-y-2 p-4">
+              {/* <form onSubmit={submitSearch} className="space-y-2 p-4">
                 <div className="relative">
                   <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
@@ -196,7 +196,7 @@ const SiteHeader = () => {
                     Tìm
                   </Button>
                 </div>
-              </form>
+              </form> */}
 
               <nav className="flex-1 space-y-1 px-3 pb-3">
                 <button
