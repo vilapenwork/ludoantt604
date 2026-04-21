@@ -1,8 +1,28 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const FULL_TITLE = "Trang thông tin Lữ đoàn 604";
+const BREAK_AFTER = "Trang thông tin ";
+
 const Hero = () => {
+  const [typed, setTyped] = useState("");
+
+  useEffect(() => {
+    let i = 0;
+    const id = setInterval(() => {
+      i++;
+      setTyped(FULL_TITLE.slice(0, i));
+      if (i >= FULL_TITLE.length) clearInterval(id);
+    }, 70);
+    return () => clearInterval(id);
+  }, []);
+
+  const beforeBreak = typed.slice(0, Math.min(typed.length, BREAK_AFTER.length));
+  const afterBreak = typed.length > BREAK_AFTER.length ? typed.slice(BREAK_AFTER.length) : "";
+  const done = typed.length >= FULL_TITLE.length;
+
   return (
     <section className="relative isolate overflow-hidden">
       {/* gradient backdrop */}
@@ -66,10 +86,19 @@ const Hero = () => {
             solution above
 
           </h1> */}
-          <h1 className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl"
-             style={{ color: "#f9e972" }}
+          <h1
+            className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl"
+            style={{ color: "#f9e972" }}
+            aria-label={FULL_TITLE}
           >
-            Trang thông tin <br className="lg:hidden" /> Lữ đoàn 604
+            {beforeBreak}
+            <br className="lg:hidden" />
+            {afterBreak}
+            <span
+              aria-hidden
+              className={`inline-block w-[0.08em] ml-1 align-baseline ${done ? "animate-pulse" : ""}`}
+              style={{ backgroundColor: "#f9e972", height: "0.9em" }}
+            />
           </h1>
 
 
@@ -82,7 +111,11 @@ const Hero = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3 justify-center">
-            <Button asChild size="lg" className="bg-[hsl(var(--hero-foreground))] text-[hsl(var(--hero-bg))] hover:bg-[hsl(var(--hero-foreground)/0.9)]">
+            <Button
+              asChild
+              size="lg"
+              className="text-white border-0 bg-[length:200%_200%] animate-gradient-shift bg-gradient-to-r from-[#ff5f6d] via-[#ffc371] to-[#ff5f6d] hover:opacity-95"
+            >
               <Link to="/lich-su">
                 Xem thêm <ArrowRight className="h-4 w-4" />
               </Link>
