@@ -94,17 +94,12 @@ const Hero = () => {
             {beforeBreak}
             <br className="lg:hidden" />
             {afterBreak}
-            <span
-              aria-hidden
-              className={`inline-block w-[0.08em] ml-1 align-baseline ${done ? "animate-pulse" : ""}`}
-              style={{ backgroundColor: "#f9e972", height: "0.9em" }}
-            />
           </h1>
 
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[hsl(var(--hero-foreground)/0.85)] md:text-lg
-            text-justify
-          ">
+            text-justify animate-fade-in
+          " style={{ animationDuration: "1.5s", animationDelay: "0.3s", animationFillMode: "both" }}>
             Hành trình hơn bốn thập kỷ xây dựng, chiến đấu và trưởng thành của Lữ đoàn Thông tin 604 –
             đơn vị bảo đảm thông tin liên lạc cho Bộ Tư lệnh Quân khu 2, gìn giữ và phát huy truyền thống
             anh hùng của Quân đội nhân dân Việt Nam.
