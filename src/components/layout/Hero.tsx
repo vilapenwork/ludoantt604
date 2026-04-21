@@ -52,15 +52,26 @@ const Hero = () => {
            
            >
             <Sparkles className="h-3.5 w-3.5" />
-            Kỷ niệm truyền thống
+          Kịp thời - Chính xác - Bí mật - An toàn
           </span>
 
-          <h1 className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl"
-          // color #D32F3F
-            style={{ color: "#f9e972" }}
+            
+          {/* <h1 className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl"
+             style={{ color: "#f9e972" }}
           >
-            Trang thông tin Lữ đoàn 604
+             
+         
+            Trang thông tin   <br className=" hidden md:inline" /> Lữ đoàn 604 
+            but if mobile, add br at middle text , else hidden
+            solution above
+
+          </h1> */}
+          <h1 className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl"
+             style={{ color: "#f9e972" }}
+          >
+            Trang thông tin <br className="lg:hidden" /> Lữ đoàn 604
           </h1>
+
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[hsl(var(--hero-foreground)/0.85)] md:text-lg
             text-justify
