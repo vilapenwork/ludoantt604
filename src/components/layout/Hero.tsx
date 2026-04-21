@@ -87,10 +87,18 @@ const Hero = () => {
 
           </h1> */}
           <h1
-            className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl overflow-hidden whitespace-pre-wrap animate-typing"
+            className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl"
             style={{ color: "#f9e972" }}
+            aria-label={FULL_TITLE}
           >
-            Trang thông tin <br className="lg:hidden" /> Lữ đoàn 604
+            {beforeBreak}
+            <br className="lg:hidden" />
+            {afterBreak}
+            <span
+              aria-hidden
+              className={`inline-block w-[0.08em] ml-1 align-baseline ${done ? "animate-pulse" : ""}`}
+              style={{ backgroundColor: "#f9e972", height: "0.9em" }}
+            />
           </h1>
 
 
