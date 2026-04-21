@@ -66,8 +66,9 @@ const Hero = () => {
             solution above
 
           </h1> */}
-          <h1 className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl"
-             style={{ color: "#f9e972" }}
+          <h1
+            className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl overflow-hidden whitespace-pre-wrap animate-typing"
+            style={{ color: "#f9e972" }}
           >
             Trang thông tin <br className="lg:hidden" /> Lữ đoàn 604
           </h1>
