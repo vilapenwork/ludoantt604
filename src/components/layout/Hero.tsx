@@ -126,9 +126,12 @@ const Hero = () => {
         }}
       />
 
-      <div className="mx-auto max-w-6xl px-4 py-10 md:py-28 lg:py-32" >
+      <div className="mx-auto max-w-6xl px-4 py-10 md:py-28 lg:py-32 r" >
 
-        <div className="max-w-3xl text-[hsl(var(--hero-foreground))]">
+        <div className="max-w-5xl text-[hsl(var(--hero-foreground))]   
+        // center the content and make it full width on mobile
+        mx-auto text-center  
+        ">
           <span
             style={{ color: "#FFD700", backgroundColor: "#D32F3F" }}
             className="animate-slide-in-down inline-flex max-w-full items-center gap-2 overflow-hidden rounded-full border border-[hsl(var(--hero-foreground)/0.25)] px-3 py-1 text-xs font-medium uppercase tracking-wider"
@@ -168,14 +171,13 @@ const Hero = () => {
 
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[hsl(var(--hero-foreground)/0.85)] md:text-lg
-            text-justify animate-slide-in-right
+             animate-slide-in-right   mx-auto text-center   
           " style={{ animationDelay: "0.6s" }}>
             Hành trình hơn bốn thập kỷ xây dựng, chiến đấu và trưởng thành của Lữ đoàn Thông tin 604 –
             đơn vị bảo đảm thông tin liên lạc cho Bộ Tư lệnh Quân khu 2, gìn giữ và phát huy truyền thống
             anh hùng của Quân đội nhân dân Việt Nam.
           </p>
 
-<<<<<<< HEAD
           <div className="mt-1 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg 
            h-40 sm:h-58 md:h-56 lg:h-64
      
@@ -192,37 +194,6 @@ const Hero = () => {
               />
             ))}
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-=======
-          <div
-            data-hero-carousel
-            className="mt-8 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg bg-black/20"
-            style={maxH ? { height: `${maxH}px` } : { minHeight: "10rem" }}
-          >
-            <Carousel
-              setApi={setApi}
-              opts={{ loop: true, align: "center" }}
-              plugins={[autoplay.current]}
-              className="h-full"
-            >
-              <CarouselContent className="h-full -ml-0">
-                {heroImages.map((src, i) => (
-                  <CarouselItem key={i} className="pl-0 basis-full h-full">
-                    <div className="flex h-full w-full items-center justify-center">
-                      <img
-                        src={src}
-                        alt={`Hình ảnh Lữ đoàn 604 ${i + 1}`}
-                        loading="lazy"
-                        draggable={false}
-                        style={maxH ? { maxHeight: `${maxH}px` } : undefined}
-                        className="h-full w-auto max-w-full object-contain select-none"
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
-            <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
->>>>>>> dccba0b2d4c38736226357dd691e197056ab5641
               {heroImages.map((_, i) => (
                 <button
                   key={i}

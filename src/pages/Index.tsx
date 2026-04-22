@@ -416,7 +416,7 @@ const Index = () => {
           Tìm
         </Button>
       </form>
-      <div className="flex  items-center gap-2 justify-end">
+      <div className="flex  items-center gap-2 justify-center">
         {showCategory && categories.length > 0 && (
           <Select
             value={categoryParam}
