@@ -116,8 +116,7 @@ const Hero = () => {
 
           </h1> */}
           <h1
-            className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl animate-slide-in-left"
-            style={{ color: "#f9e972" }}
+            className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl animate-slide-in-left text-shine"
           >
             Trang thông tin
             <br className="lg:hidden" />
