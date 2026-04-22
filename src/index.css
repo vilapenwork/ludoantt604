@@ -94,6 +94,33 @@
     }
 }
 
+/* Mobile-friendly tap + smoothness helpers */
+@layer base {
+    html, body {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+@layer utilities {
+    .hover-scale {
+        @apply transition-transform duration-300 ease-[cubic-bezier(.22,1,.36,1)] hover:scale-[1.02] active:scale-[0.985];
+    }
+    .img-zoom {
+        @apply transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:scale-[1.06];
+    }
+    .story-link {
+        @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+    }
+    .skeleton-shimmer {
+        background: linear-gradient(90deg, hsl(var(--muted)) 0%, hsl(var(--muted-foreground) / 0.15) 50%, hsl(var(--muted)) 100%);
+        background-size: 200% 100%;
+        @apply animate-shimmer;
+    }
+    .will-animate {
+        will-change: transform, opacity;
+    }
+}
+
 
 /* TipTap Editor Styles */
 
