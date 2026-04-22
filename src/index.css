@@ -119,6 +119,30 @@
     .will-animate {
         will-change: transform, opacity;
     }
+    /* Shiny text — golden base with a moving highlight sweep */
+    .text-shine {
+        background-image: linear-gradient(
+            110deg,
+            #f9e972 0%,
+            #f9e972 38%,
+            #ffffff 50%,
+            #fff6b0 58%,
+            #f9e972 70%,
+            #f9e972 100%
+        );
+        background-size: 220% 100%;
+        background-repeat: no-repeat;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        animation: text-shine 3.6s linear infinite;
+    }
+}
+
+@keyframes text-shine {
+    0% { background-position: 180% 0; }
+    100% { background-position: -80% 0; }
 }
 
 
