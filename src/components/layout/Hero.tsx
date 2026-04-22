@@ -133,9 +133,11 @@ const Hero = () => {
             anh hùng của Quân đội nhân dân Việt Nam.
           </p>
 
-          <div className="mt-1 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg 
+          <div
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            className="mt-1 relative w-full overflow-hidden rounded-xl border border-[hsl(var(--hero-foreground)/0.2)] shadow-lg
            h-40 sm:h-58 md:h-56 lg:h-64
-     
           ">
             {heroImages.map((src, i) => (
               <img
@@ -143,20 +145,22 @@ const Hero = () => {
                 src={src}
                 alt={`Hình ảnh Lữ đoàn 604 ${i + 1}`}
                 loading="lazy"
-                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
-                  i === slideIdx ? "opacity-100" : "opacity-0"
+                decoding="async"
+                className={`absolute inset-0 h-full w-full object-cover transition-all duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] ${
+                  i === slideIdx ? "opacity-100 scale-100" : "opacity-0 scale-105"
                 }`}
               />
             ))}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
               {heroImages.map((_, i) => (
                 <button
                   key={i}
                   type="button"
                   aria-label={`Chuyển tới ảnh ${i + 1}`}
-                  onClick={() => api?.scrollTo(i)}
+                  onClick={() => setSlideIdx(i)}
                   className={`pointer-events-auto h-1.5 rounded-full transition-all duration-300 ${
-                    i === slideIdx ? "w-6 bg-white" : "w-1.5 bg-white/50"
+                    i === slideIdx ? "w-6 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80"
                   }`}
                 />
               ))}
