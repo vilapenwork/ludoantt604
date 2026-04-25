@@ -129,6 +129,9 @@ const Index = () => {
   const queryParam = searchParams.get("q") || "";
   const categoryParam = searchParams.get("cat") || "all";
   const timeParam = searchParams.get("time") || "all";
+  const pageParam = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
+
+  const PAGE_SIZE = 9;
 
   const [searchInput, setSearchInput] = useState(queryParam);
   useEffect(() => setSearchInput(queryParam), [queryParam]);
