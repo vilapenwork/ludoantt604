@@ -41,6 +41,14 @@ import {
   RefreshCw,
   Search,
 } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 type Article = Tables<"articles">;
 type Activity = Tables<"activities">;
@@ -121,6 +129,9 @@ const Index = () => {
   const queryParam = searchParams.get("q") || "";
   const categoryParam = searchParams.get("cat") || "all";
   const timeParam = searchParams.get("time") || "all";
+  const pageParam = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
+
+  const PAGE_SIZE = 9;
 
   const [searchInput, setSearchInput] = useState(queryParam);
   useEffect(() => setSearchInput(queryParam), [queryParam]);
@@ -259,7 +270,67 @@ const Index = () => {
     const next = new URLSearchParams(searchParams);
     if (!value || value === "all") next.delete(key);
     else next.set(key, value);
+    // reset pagination when filters change
+    if (key !== "page") next.delete("page");
     setSearchParams(next, { replace: true });
+  };
+
+  const goToPage = (p: number) => {
+    const next = new URLSearchParams(searchParams);
+    if (p <= 1) next.delete("page");
+    else next.set("page", String(p));
+    setSearchParams(next, { replace: false });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const renderPagination = (totalItems: number) => {
+    const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
+    if (totalPages <= 1) return null;
+    const current = Math.min(pageParam, totalPages);
+    const pages: number[] = [];
+    const start = Math.max(1, current - 2);
+    const end = Math.min(totalPages, start + 4);
+    for (let i = start; i <= end; i++) pages.push(i);
+    return (
+      <Pagination className="pt-4">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (current > 1) goToPage(current - 1);
+              }}
+              className={current === 1 ? "pointer-events-none opacity-50" : ""}
+            />
+          </PaginationItem>
+          {pages.map((p) => (
+            <PaginationItem key={p}>
+              <PaginationLink
+                href="#"
+                isActive={p === current}
+                onClick={(e) => {
+                  e.preventDefault();
+                  goToPage(p);
+                }}
+              >
+                {p}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (current < totalPages) goToPage(current + 1);
+              }}
+              className={current === totalPages ? "pointer-events-none opacity-50" : ""}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    );
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -595,9 +666,14 @@ const Index = () => {
               {loading ?
                 renderLoading()
               : filteredArticles.length ?
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                  {filteredArticles.map(renderItemCard)}
-                </div>
+                <>
+                  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {filteredArticles
+                      .slice((pageParam - 1) * PAGE_SIZE, pageParam * PAGE_SIZE)
+                      .map(renderItemCard)}
+                  </div>
+                  {renderPagination(filteredArticles.length)}
+                </>
               : renderEmpty(
                   "Không có kết quả",
                   "Hãy thử thay đổi từ khoá hoặc bộ lọc.",
@@ -619,14 +695,18 @@ const Index = () => {
               {loading ?
                 renderLoading()
               : filteredActivities.length ?
-                <div
-                  className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 
-
-                    text-sm
-                  "
-                >
-                  {filteredActivities.map(renderItemCard)}
-                </div>
+                <>
+                  <div
+                    className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 
+                      text-sm
+                    "
+                  >
+                    {filteredActivities
+                      .slice((pageParam - 1) * PAGE_SIZE, pageParam * PAGE_SIZE)
+                      .map(renderItemCard)}
+                  </div>
+                  {renderPagination(filteredActivities.length)}
+                </>
               : renderEmpty(
                   "Không có kết quả",
                   "Hãy thử thay đổi từ khoá hoặc bộ lọc.",

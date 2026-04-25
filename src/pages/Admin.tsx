@@ -13,6 +13,8 @@ import AdminAccounts from "@/components/admin/AdminAccounts";
 
 type TabType = "articles" | "activities" | "leaders" | "accounts";
 
+const PAGE_SIZE = 20;
+
 const Admin = () => {
   const { isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ const Admin = () => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataError, setDataError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     if (!loading && !isAdmin) {
@@ -29,30 +33,41 @@ const Admin = () => {
     }
   }, [loading, isAdmin, navigate]);
 
+  // Reset to first page when tab changes
+  useEffect(() => {
+    setPage(1);
+  }, [activeTab]);
+
   useEffect(() => {
     if (!loading && isAdmin && activeTab !== "accounts") {
       void fetchData();
     }
-  }, [activeTab, loading, isAdmin]);
+  }, [activeTab, loading, isAdmin, page]);
 
   const fetchData = async () => {
     if (activeTab === "accounts") return;
     setDataLoading(true);
     setDataError(null);
 
-    const { data: rows, error } = await supabase
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    const { data: rows, count, error } = await supabase
       .from(activeTab as "articles" | "activities" | "leaders")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
     if (error) {
       setData([]);
+      setTotalCount(0);
       setDataError(error.message);
       setDataLoading(false);
       return;
     }
 
     setData(rows || []);
+    setTotalCount(count || 0);
     setDataLoading(false);
   };
 
@@ -231,6 +246,33 @@ const Admin = () => {
                   </TableBody>
                 </Table>
               </div>
+
+              {/* Pagination footer */}
+              {totalCount > 0 && (
+                <div className="mt-4 flex items-center justify-between gap-3 text-sm">
+                  <p className="text-muted-foreground">
+                    Tổng: <span className="font-medium text-foreground">{totalCount}</span> · Trang {page}/{Math.max(1, Math.ceil(totalCount / PAGE_SIZE))}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page === 1 || dataLoading}
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    >
+                      Trước
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page >= Math.ceil(totalCount / PAGE_SIZE) || dataLoading}
+                      onClick={() => setPage((p) => p + 1)}
+                    >
+                      Sau
+                    </Button>
+                  </div>
+                </div>
+              )}
             </TabsContent>
           ))}
           <TabsContent value="accounts">
