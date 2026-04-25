@@ -41,6 +41,14 @@ import {
   RefreshCw,
   Search,
 } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 type Article = Tables<"articles">;
 type Activity = Tables<"activities">;
