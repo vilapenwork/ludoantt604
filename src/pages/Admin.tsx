@@ -33,30 +33,41 @@ const Admin = () => {
     }
   }, [loading, isAdmin, navigate]);
 
+  // Reset to first page when tab changes
+  useEffect(() => {
+    setPage(1);
+  }, [activeTab]);
+
   useEffect(() => {
     if (!loading && isAdmin && activeTab !== "accounts") {
       void fetchData();
     }
-  }, [activeTab, loading, isAdmin]);
+  }, [activeTab, loading, isAdmin, page]);
 
   const fetchData = async () => {
     if (activeTab === "accounts") return;
     setDataLoading(true);
     setDataError(null);
 
-    const { data: rows, error } = await supabase
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    const { data: rows, count, error } = await supabase
       .from(activeTab as "articles" | "activities" | "leaders")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
     if (error) {
       setData([]);
+      setTotalCount(0);
       setDataError(error.message);
       setDataLoading(false);
       return;
     }
 
     setData(rows || []);
+    setTotalCount(count || 0);
     setDataLoading(false);
   };
 
