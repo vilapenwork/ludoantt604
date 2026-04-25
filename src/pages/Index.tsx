@@ -666,9 +666,14 @@ const Index = () => {
               {loading ?
                 renderLoading()
               : filteredArticles.length ?
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                  {filteredArticles.map(renderItemCard)}
-                </div>
+                <>
+                  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {filteredArticles
+                      .slice((pageParam - 1) * PAGE_SIZE, pageParam * PAGE_SIZE)
+                      .map(renderItemCard)}
+                  </div>
+                  {renderPagination(filteredArticles.length)}
+                </>
               : renderEmpty(
                   "Không có kết quả",
                   "Hãy thử thay đổi từ khoá hoặc bộ lọc.",
