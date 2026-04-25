@@ -13,6 +13,8 @@ import AdminAccounts from "@/components/admin/AdminAccounts";
 
 type TabType = "articles" | "activities" | "leaders" | "accounts";
 
+const PAGE_SIZE = 20;
+
 const Admin = () => {
   const { isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
