@@ -246,6 +246,33 @@ const Admin = () => {
                   </TableBody>
                 </Table>
               </div>
+
+              {/* Pagination footer */}
+              {totalCount > 0 && (
+                <div className="mt-4 flex items-center justify-between gap-3 text-sm">
+                  <p className="text-muted-foreground">
+                    Tổng: <span className="font-medium text-foreground">{totalCount}</span> · Trang {page}/{Math.max(1, Math.ceil(totalCount / PAGE_SIZE))}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page === 1 || dataLoading}
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    >
+                      Trước
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page >= Math.ceil(totalCount / PAGE_SIZE) || dataLoading}
+                      onClick={() => setPage((p) => p + 1)}
+                    >
+                      Sau
+                    </Button>
+                  </div>
+                </div>
+              )}
             </TabsContent>
           ))}
           <TabsContent value="accounts">
