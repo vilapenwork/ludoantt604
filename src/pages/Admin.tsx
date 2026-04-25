@@ -24,6 +24,8 @@ const Admin = () => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataError, setDataError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     if (!loading && !isAdmin) {
