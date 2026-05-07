@@ -10,8 +10,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, Plus, Pencil, Trash2, LogOut, RefreshCw, ShieldAlert, Home, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdminAccounts from "@/components/admin/AdminAccounts";
+import BackupRestore from "@/components/admin/BackupRestore";
 
-type TabType = "articles" | "activities" | "leaders" | "accounts";
+type TabType = "articles" | "activities" | "leaders" | "accounts" | "backup";
 
 const PAGE_SIZE = 20;
 
@@ -39,13 +40,13 @@ const Admin = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    if (!loading && isAdmin && activeTab !== "accounts") {
+    if (!loading && isAdmin && activeTab !== "accounts" && activeTab !== "backup") {
       void fetchData();
     }
   }, [activeTab, loading, isAdmin, page]);
 
   const fetchData = async () => {
-    if (activeTab === "accounts") return;
+    if (activeTab === "accounts" || activeTab === "backup") return;
     setDataLoading(true);
     setDataError(null);
 
@@ -107,7 +108,7 @@ const Admin = () => {
     );
   }
 
-  const tabLabels: Record<TabType, string> = { articles: "Bài viết", activities: "Hoạt động", leaders: "Lãnh đạo", accounts: "Tài khoản" };
+  const tabLabels: Record<TabType, string> = { articles: "Bài viết", activities: "Hoạt động", leaders: "Lãnh đạo", accounts: "Tài khoản", backup: "Sao lưu" };
   const dataTabs: TabType[] = ["articles", "activities", "leaders"];
 
   return (
@@ -148,7 +149,7 @@ const Admin = () => {
                 <TabsTrigger key={tab} value={tab} className="flex-1 sm:flex-none">{tabLabels[tab]}</TabsTrigger>
               ))}
             </TabsList>
-            {activeTab !== "accounts" && (
+            {activeTab !== "accounts" && activeTab !== "backup" && (
               <Button size="sm" onClick={() => navigate(`/admin/${activeTab}/new`)}>
                 <Plus className="mr-1.5 h-4 w-4" /> Thêm mới
               </Button>
@@ -277,6 +278,9 @@ const Admin = () => {
           ))}
           <TabsContent value="accounts">
             <AdminAccounts />
+          </TabsContent>
+          <TabsContent value="backup">
+            <BackupRestore />
           </TabsContent>
         </Tabs>
       </main>

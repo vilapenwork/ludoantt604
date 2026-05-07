@@ -1,61 +1,114 @@
-## Tình trạng dung lượng DB hiện tại
+## Mục tiêu
 
-Mình đã query trực tiếp database — kết quả:
-
-| Hạng mục | Giá trị |
-|---|---|
-| **Tổng dung lượng DB** | **11 MB** / 500 MB (mới dùng ~2%) |
-| Bảng `articles` | 96 KB · **5 bài** |
-| Bảng `activities` | 80 KB · **2 hoạt động** |
-| Bảng `leaders` | 32 KB · **24 lãnh đạo** |
-
-→ Còn rất nhiều chỗ trống. Ước tính có thể chứa **vài chục nghìn bài viết** trước khi cần nâng cấp gói.
+Thêm tab **"Sao lưu"** trong trang Admin (`/admin`) cho phép:
+1. **Tải về** toàn bộ dữ liệu (`articles`, `activities`, `leaders`) thành 1 file JSON.
+2. **Khôi phục** từ file JSON đó khi cần.
 
 ---
 
-## Plan: Thêm phân trang
+## UI — Tab "Sao lưu" mới
 
-Hiện tại trang chủ và Admin đang `select("*")` không giới hạn → khi nhiều bài sẽ load chậm. Mình sẽ thêm phân trang server-side dùng `.range()` của Supabase.
+Thêm tab thứ 5 vào `Admin.tsx` (cạnh Bài viết / Hoạt động / Lãnh đạo / Tài khoản).
 
-### 1. Trang công khai (`src/pages/Index.tsx`)
+**Khu vực 1 — Tải về (Export):**
+- Card với mô tả "Tải toàn bộ dữ liệu về máy dưới dạng JSON".
+- Nút **"Tải xuống bản sao lưu"** → tải file `backup-ludoan604-YYYY-MM-DD-HHmm.json`.
+- Hiển thị số lượng record sẽ được backup (vd: "5 bài viết · 2 hoạt động · 24 lãnh đạo").
+- Hiển thị "Lần sao lưu cuối: X ngày trước" (lưu trong `localStorage`).
 
-- Áp dụng cho 3 nơi: danh sách **Tin tức** (`/tin-tuc`), **Hoạt động** (`/activities`), và section bài viết ở trang chủ.
-- Page size: **9 bài/trang** (lưới 3 cột).
-- Dùng `count: 'exact'` để biết tổng số → tính số trang.
-- Trang chủ giữ nguyên hiển thị 6 bài mới nhất + nút "Xem tất cả" → không phân trang.
-- Trang `/tin-tuc` và `/activities`: thêm component `<Pagination>` (đã có sẵn `src/components/ui/pagination.tsx`) ở cuối danh sách, đồng bộ số trang qua URL `?page=2`.
-- Khi đổi filter (search/category/time) → reset về page 1.
-- Filter search/category/time vẫn xử lý client-side trên trang hiện tại (vì hiện chưa có full-text search ở DB) — sẽ ghi chú để sau này nâng cấp lên server-side khi data lớn.
+**Khu vực 2 — Khôi phục (Import):**
+- Input file `accept=".json"`.
+- Sau khi chọn file → hiển thị **preview**: "File chứa X bài viết, Y hoạt động, Z lãnh đạo, ngày backup …".
+- 2 chế độ (radio):
+  - **Gộp (Merge)** — mặc định: upsert theo `id`, không xóa dữ liệu hiện tại. An toàn.
+  - **Thay thế (Replace)**: XÓA hết rồi insert lại — có **AlertDialog xác nhận 2 lớp** với cảnh báo đỏ.
+- Nút "Khôi phục" → progress + toast kết quả từng bảng.
 
-### 2. Trang Admin (`src/pages/Admin.tsx`)
+---
 
-- Page size: **20 dòng/trang** cho cả 3 tab (articles, activities, leaders).
-- Thêm thanh phân trang đơn giản (Prev / "Trang X/Y" / Next) ở dưới bảng.
-- Khi đổi tab → reset về page 1.
-- Dùng `count: 'exact'` để hiển thị tổng số bản ghi.
+## Định dạng file backup
 
-### 3. Chi tiết kỹ thuật
-
-```ts
-// Mẫu query phân trang
-const PAGE_SIZE = 9;
-const from = (page - 1) * PAGE_SIZE;
-const to = from + PAGE_SIZE - 1;
-
-const { data, count, error } = await supabase
-  .from("articles")
-  .select("*", { count: "exact" })
-  .order("created_at", { ascending: false })
-  .range(from, to);
+```json
+{
+  "version": 1,
+  "exportedAt": "2026-05-07T10:00:00Z",
+  "source": "ludoan604",
+  "counts": { "articles": 5, "activities": 2, "leaders": 24 },
+  "data": {
+    "articles":   [ /* tất cả rows */ ],
+    "activities": [ /* tất cả rows */ ],
+    "leaders":    [ /* tất cả rows */ ]
+  }
+}
 ```
 
-- State: `page`, `totalCount`, `loading`.
-- Tách hàm fetch theo từng resource thay vì gộp `Promise.all` cho cả ba (vì mỗi list cần page riêng).
-- Giữ nguyên UI/style hiện tại; chỉ thêm component pagination + state.
+Không backup `user_roles` và `auth.users` (nhạy cảm + không truy cập được qua client SDK).
 
-### Files sẽ chỉnh
+---
 
-- `src/pages/Index.tsx` — phân trang cho `/tin-tuc` và `/activities`.
-- `src/pages/Admin.tsx` — phân trang cho 3 tab dữ liệu.
+## Chi tiết kỹ thuật
 
-Không cần thay đổi DB hay edge functions.
+**File mới:**
+- `src/components/admin/BackupRestore.tsx` — toàn bộ UI + logic export/import.
+
+**File sửa:**
+- `src/pages/Admin.tsx` — thêm `"backup"` vào `TabType`, `tabLabels`, và `<TabsContent value="backup"><BackupRestore /></TabsContent>`.
+
+**Logic Export:**
+```ts
+const tables = ['articles','activities','leaders'] as const;
+const data: any = {};
+for (const t of tables) {
+  // dùng .range() để vượt giới hạn 1000 row mặc định nếu cần
+  const { data: rows } = await supabase.from(t).select('*');
+  data[t] = rows ?? [];
+}
+const backup = { version: 1, exportedAt: new Date().toISOString(), source: 'ludoan604', counts: {...}, data };
+const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+const url = URL.createObjectURL(blob);
+// <a href={url} download={`backup-ludoan604-${ts}.json`} />.click()
+localStorage.setItem('lastBackupAt', new Date().toISOString());
+```
+
+**Logic Import — Merge:**
+```ts
+await supabase.from('articles').upsert(backup.data.articles, { onConflict: 'id' });
+await supabase.from('activities').upsert(backup.data.activities, { onConflict: 'id' });
+await supabase.from('leaders').upsert(backup.data.leaders, { onConflict: 'id' });
+```
+
+**Logic Import — Replace (sau khi user xác nhận 2 lần):**
+```ts
+// Dùng filter "luôn đúng" để bypass yêu cầu .delete() cần WHERE
+await supabase.from('articles').delete().not('id', 'is', null);
+await supabase.from('articles').insert(backup.data.articles);
+// lặp lại cho activities, leaders
+```
+
+**Validation trước khi import:**
+- Kiểm tra `backup.version === 1`.
+- Kiểm tra `backup.data.articles` là array.
+- Bắt lỗi từng bảng riêng → toast hiển thị bảng nào lỗi, vẫn tiếp tục các bảng khác.
+
+**Bảo mật:**
+- Tab chỉ render trong `Admin.tsx` (đã có `isAdmin` guard).
+- RLS hiện tại đảm bảo non-admin không thể insert/delete/update kể cả nếu gọi trực tiếp.
+
+---
+
+## Test sau khi build
+
+1. Bấm "Tải xuống bản sao lưu" → mở file JSON xem đủ 5+2+24 records.
+2. Xóa thử 1 bài viết → import Merge → bài viết quay lại.
+3. Import Replace với file backup → toàn bộ dữ liệu khớp lại nguyên vẹn.
+
+---
+
+## Lợi ích phụ
+
+File JSON này cũng dùng được nếu sau này muốn:
+- Migrate sang nền tảng khác (Firebase/MongoDB) — chỉ cần script convert.
+- Khôi phục nếu Supabase free-tier bị pause/xóa nhầm.
+- Backup trước khi chỉnh sửa hàng loạt.
+
+Bấm **"Implement plan"** để tôi triển khai.
