@@ -10,8 +10,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, Plus, Pencil, Trash2, LogOut, RefreshCw, ShieldAlert, Home, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdminAccounts from "@/components/admin/AdminAccounts";
+import BackupRestore from "@/components/admin/BackupRestore";
 
-type TabType = "articles" | "activities" | "leaders" | "accounts";
+type TabType = "articles" | "activities" | "leaders" | "accounts" | "backup";
 
 const PAGE_SIZE = 20;
 
