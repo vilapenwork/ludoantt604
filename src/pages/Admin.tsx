@@ -108,7 +108,7 @@ const Admin = () => {
     );
   }
 
-  const tabLabels: Record<TabType, string> = { articles: "Bài viết", activities: "Hoạt động", leaders: "Lãnh đạo", accounts: "Tài khoản" };
+  const tabLabels: Record<TabType, string> = { articles: "Bài viết", activities: "Hoạt động", leaders: "Lãnh đạo", accounts: "Tài khoản", backup: "Sao lưu" };
   const dataTabs: TabType[] = ["articles", "activities", "leaders"];
 
   return (
