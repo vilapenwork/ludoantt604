@@ -40,13 +40,13 @@ const Admin = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    if (!loading && isAdmin && activeTab !== "accounts") {
+    if (!loading && isAdmin && activeTab !== "accounts" && activeTab !== "backup") {
       void fetchData();
     }
   }, [activeTab, loading, isAdmin, page]);
 
   const fetchData = async () => {
-    if (activeTab === "accounts") return;
+    if (activeTab === "accounts" || activeTab === "backup") return;
     setDataLoading(true);
     setDataError(null);
 
