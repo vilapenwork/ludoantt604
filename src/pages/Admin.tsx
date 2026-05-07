@@ -279,6 +279,9 @@ const Admin = () => {
           <TabsContent value="accounts">
             <AdminAccounts />
           </TabsContent>
+          <TabsContent value="backup">
+            <BackupRestore />
+          </TabsContent>
         </Tabs>
       </main>
 
