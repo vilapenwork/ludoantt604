@@ -149,7 +149,7 @@ const Admin = () => {
                 <TabsTrigger key={tab} value={tab} className="flex-1 sm:flex-none">{tabLabels[tab]}</TabsTrigger>
               ))}
             </TabsList>
-            {activeTab !== "accounts" && (
+            {activeTab !== "accounts" && activeTab !== "backup" && (
               <Button size="sm" onClick={() => navigate(`/admin/${activeTab}/new`)}>
                 <Plus className="mr-1.5 h-4 w-4" /> Thêm mới
               </Button>
